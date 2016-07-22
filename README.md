@@ -22,4 +22,5 @@ foreach ($productList->getProductList() as $product) {
 ## !! important note !!
 
 Currently API only has single method - getProductList(). Other methods will come eventually.
+
 Warning: this is not official API, nor is officially supported, so use it at your own risk.
