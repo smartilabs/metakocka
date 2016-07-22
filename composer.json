@@ -1,0 +1,35 @@
+{
+  "name": "smartilabs/metakocka",
+  "version": "dev-master",
+  "license": "MIT",
+  "source": {
+    "url": "git://github.com/smartilabs/metakocka.git",
+    "type": "git",
+    "reference": "master"
+  },
+  "authors": [
+    {
+      "name": "bbos",
+      "email": "bostjan@smartilabs.si"
+    }
+  ],
+  "keywords": [
+    "api",
+    "metakocka"
+  ],
+  "require": {
+    "php": "^7.0",
+    "guzzlehttp/guzzle": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.0.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Smarti\\Metakocka\\": "src/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  }
+}

@@ -1,0 +1,9 @@
+.git
+.idea/
+vendor/
+.vagrant/
+Vagrantfile
+config.yaml
+setup.rb
+composer.lock
+testapp/
