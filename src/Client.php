@@ -2,9 +2,14 @@
 namespace Smarti\Metakocka;
 
 use GuzzleHttp\Exception\ClientException;
+use Smarti\Metakocka\Resource\Product\ItemRequest;
+use Smarti\Metakocka\Resource\Product\ItemResponse;
 use Smarti\Metakocka\Resource\Product\ListResponse;
 use Smarti\Metakocka\Resource\RequestInterface;
 use Smarti\Metakocka\Resource\Product\ListRequest;
+use Smarti\Metakocka\Resource\Sales\BillPdfRequest;
+use Smarti\Metakocka\Resource\Sales\BillRequest;
+use Smarti\Metakocka\Resource\Sales\BillResponse;
 
 class Client
 {
@@ -50,23 +55,63 @@ class Client
     }
 
     /**
+     * @param ItemRequest $data
+     * @return ItemResponse
+     */
+    public function createProduct(ItemRequest $data) : ItemResponse
+    {
+        $data->validate();
+        $responseData = $this->request('product_add', $data);
+
+        return new ItemResponse($responseData);
+    }
+
+    /**
+     * @param BillRequest $data
+     * @return BillResponse
+     */
+    public function createBill(BillRequest $data) : BillResponse
+    {
+        $data->validate();
+        $responseData = $this->request('put_sales_bill', $data);
+
+        return new BillResponse($responseData);
+    }
+
+    /**
+     * @param BillPdfRequest $data
+     * @return bool|mixed
+     * @throws Exception\InvalidDataException
+     */
+    public function getBillPdf(BillPdfRequest $data)
+    {
+        $data->validate();
+        $responseData = $this->request('report_bill', $data, true);
+
+        return $responseData;
+    }
+
+    /**
+     * @param string $type
      * @return \GuzzleHttp\Client
      */
-    private function getHttpClient()
+    private function getHttpClient($type = 'json')
     {
         return new \GuzzleHttp\Client([
-            'base_uri' => 'https://main.metakocka.si/rest/eshop/v1/json/',
+            'base_uri' => "https://main.metakocka.si/rest/eshop/v1/$type/",
         ]);
     }
 
     /**
      * @param string $resource
      * @param RequestInterface|null $data
-     * @return bool|mixed
+     * @param bool $pdf
+     * @return mixed|string
+     * @throws \Exception
      */
-    private function request(string $resource, RequestInterface $data = null)
+    private function request(string $resource, RequestInterface $data = null, $pdf = false)
     {
-        $httpClient = $this->getHttpClient();
+        $httpClient = $this->getHttpClient($pdf ? 'pdf' : 'json');
 
         $postData = $data->prepare();
         $postData["secret_key"] = $this->secretKey;
@@ -77,11 +122,14 @@ class Client
                 'body' => json_encode($postData),
                 'headers' => [
                     'content-type' => 'application/json',
-                    'accept' => 'application/json',
+//                    'accept' => 'application/json',
                 ],
             ]);
 
             $contents = $response->getBody()->getContents();
+
+            if ($pdf)
+                return $contents;
 
             $responseObject = json_decode($contents);
 
@@ -100,7 +148,12 @@ class Client
      */
     private function verifyResponse(\stdClass $response)
     {
-        if (($code = $response->opr_code) != 0)
-            throw new \Exception($response->oprDesc ?? "Unknown exception while connection to API ($code)");
+        if (($code = $response->opr_code) != 0) {
+            $desc = $response->opr_desc ??
+                ($response->opr_desc_app ??
+                    "Unknown exception while connecting to API ($code)");
+
+            throw new \Exception($desc);
+        }
     }
 }

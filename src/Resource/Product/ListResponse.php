@@ -25,7 +25,7 @@ class ListResponse extends ResponseBase
     /** @var int */
     private $productListCount = 0;
 
-    /** @var ItemResponse[] */
+    /** @var ListItemResponse[] */
     private $productList = [];
 
     /**
@@ -42,7 +42,7 @@ class ListResponse extends ResponseBase
         $productList = $data->product_list ?? [];
 
         foreach ($productList as $product) {
-            $productItem = new ItemResponse($product);
+            $productItem = new ListItemResponse($product);
 
             $this->productList[] = $productItem;
         }
@@ -89,7 +89,7 @@ class ListResponse extends ResponseBase
     }
 
     /**
-     * @return ItemResponse[]
+     * @return ListItemResponse[]
      */
     public function getProductList()
     {

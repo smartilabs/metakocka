@@ -66,4 +66,13 @@ class ListRequest implements RequestInterface
             'offset' => $this->offset,
         ];
     }
+
+    /**
+     * No required params
+     * @return bool
+     */
+    public function validate() : bool
+    {
+        return true;
+    }
 }
