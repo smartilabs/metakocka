@@ -1,10 +1,10 @@
 <?php
-namespace Smarti\Metakocka\Resource\Product;
+namespace Smarti\Metakocka\Resource\Sales;
 
 use Smarti\Metakocka\Resource\ResponseBase;
 use Smarti\Metakocka\Resource\ResponseInterface;
 
-class ItemResponse extends ResponseBase
+class BillResponse extends ResponseBase
 {
     /** @var int */
     private $mkId = null;

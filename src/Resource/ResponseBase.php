@@ -90,6 +90,6 @@ abstract class ResponseBase implements ResponseInterface
      */
     public function getData() : \stdClass
     {
-        return $this->getData();
+        return $this->data;
     }
 }

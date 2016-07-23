@@ -8,4 +8,10 @@ interface RequestInterface
      * @return array
      */
     public function prepare() : array;
+
+    /**
+     * Validate field limits and requirements
+     * @return bool
+     */
+    public function validate() : bool;
 }
