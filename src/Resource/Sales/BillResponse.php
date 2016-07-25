@@ -18,8 +18,8 @@ class BillResponse extends ResponseBase
      */
     public function parse(\stdClass $data)
     {
-        $this->mkId = (int)($data->mk_id ?? 0);
-        $this->countCode = $data->count_code ?? '';
+        $this->mkId = (int)(isset($data->mk_id) ? $data->mk_id : 0);
+        $this->countCode = isset($data->count_code) ? $data->count_code : '';
     }
 
     /**

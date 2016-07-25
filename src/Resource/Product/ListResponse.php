@@ -33,13 +33,13 @@ class ListResponse extends ResponseBase
      */
     public function parse(\stdClass $data)
     {
-        $this->limit = (int)($data->limit ?? 0);
-        $this->offset = (int)($data->offset ?? 0);
-        $this->productListCount = (int)($data->product_list_count ?? 0);
-        $this->returnWarehauseStock = DataFormat::parseBool($data->return_warehause_stock ?? '');
+        $this->limit = (int)(isset($data->limit) ? $data->limit : 0);
+        $this->offset = (int)(isset($data->offset) ? $data->offset : 0);
+        $this->productListCount = (int)(isset($data->product_list_count) ? $data->product_list_count : 0);
+        $this->returnWarehauseStock = DataFormat::parseBool(isset($data->return_warehause_stock) ? $data->return_warehause_stock : '');
         $this->sales = DataFormat::parseBool($data->sales);
 
-        $productList = $data->product_list ?? [];
+        $productList = isset($data->product_list) ? $data->product_list : [];
 
         foreach ($productList as $product) {
             $productItem = new ListItemResponse($product);
