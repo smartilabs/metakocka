@@ -46,17 +46,17 @@ class ListItemResponse extends ResponseBaseObject
      */
     public function parse(\stdClass $data)
     {
-        $this->mkId = (int)($data->mk_id ?? 0);
-        $this->countCode = $data->count_code ?? '';
-        $this->code = $data->code ?? '';
-        $this->name = $data->name ?? '';
-        $this->unit = $data->unit?? '';
-        $this->service = DataFormat::parseBool($data->unit ?? '');
-        $this->sales = DataFormat::parseBool($data->sales ?? '');
-        $this->purchasing = DataFormat::parseBool($data->purchasing ?? '');
-        $this->asset = DataFormat::parseBool($data->asset ?? '');
-        $this->work = DataFormat::parseBool($data->work ?? '');
-        $this->amount = DataFormat::parseBool($data->amount ?? '');
+        $this->mkId = (int)(isset($data->mk_id) ? $data->mk_id : 0);
+        $this->countCode = isset($data->count_code) ? $data->count_code : '';
+        $this->code = isset($data->code) ? $data->code : '';
+        $this->name = isset($data->name) ? $data->name : '';
+        $this->unit = isset($data->unit) ? $data->unit : '';
+        $this->service = DataFormat::parseBool(isset($data->unit) ? $data->unit : '');
+        $this->sales = DataFormat::parseBool(isset($data->sales) ? $data->sales : '');
+        $this->purchasing = DataFormat::parseBool(isset($data->purchasing) ? $data->purchasing : '');
+        $this->asset = DataFormat::parseBool(isset($data->asset) ? $data->asset : '');
+        $this->work = DataFormat::parseBool(isset($data->work) ? $data->work : '');
+        $this->amount = DataFormat::parseBool(isset($data->amount) ? $data->amount : '');
     }
 
     /**

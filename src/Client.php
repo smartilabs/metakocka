@@ -146,11 +146,12 @@ class Client
      * @param \stdClass $response
      * @throws \Exception
      */
-    private function verifyResponse(\stdClass $response)
+    public function verifyResponse(\stdClass $response)
     {
         if (($code = $response->opr_code) != 0) {
-            $desc = $response->opr_desc ??
-                ($response->opr_desc_app ??
+            $desc = isset($response->opr_desc) ? $response->opr_desc : null;
+            $desc = $desc ?:
+                (isset($response->opr_desc_app) ? $response->opr_desc_app :
                     "Unknown exception while connecting to API ($code)");
 
             throw new \Exception($desc);

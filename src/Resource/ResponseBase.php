@@ -39,9 +39,9 @@ abstract class ResponseBase implements ResponseInterface
     protected final function parseBase(\stdClass $data)
     {
         $this->oprCode = (int)$data->opr_code;
-        $this->oprCodeApp = (int)($data->opr_code_app ?? 0);
-        $this->oprDesc = $data->opr_desc ?? '';
-        $this->oprDescApp = $data->opr_desc ?? '';
+        $this->oprCodeApp = (int)(isset($data->opr_code_app) ? $data->opr_code_app : 0);
+        $this->oprDesc = isset($data->opr_desc) ? $data->opr_desc : '';
+        $this->oprDescApp = isset($data->opr_desc) ? $data->opr_desc : '';
         $this->oprTimeMs = (int)$data->opr_time_ms;
     }
 

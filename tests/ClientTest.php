@@ -47,4 +47,41 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Product\ListResponse::class, $this->client->getProductList($data));
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Unknown exception while connecting to API (-1)
+     */
+    public function testVerifyResponseUnknownException()
+    {
+        $response = new \stdClass();
+        $response->opr_code = -1;
+
+        $this->client->verifyResponse($response);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Test
+     */
+    public function testVerifyResponseOprDesc()
+    {
+        $response = new \stdClass();
+        $response->opr_code = -1;
+        $response->opr_desc = 'Test';
+
+        $this->client->verifyResponse($response);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Test
+     */
+    public function testVerifyResponseOprDescApp()
+    {
+        $response = new \stdClass();
+        $response->opr_code = -1;
+        $response->opr_desc_app = 'Test';
+
+        $this->client->verifyResponse($response);
+    }
 }
