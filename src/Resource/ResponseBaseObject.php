@@ -22,6 +22,6 @@ abstract class ResponseBaseObject implements ResponseInterface
      */
     public function getData()
     {
-        return $this->getData();
+        return $this->data;
     }
 }
