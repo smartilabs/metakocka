@@ -26,7 +26,7 @@ class Client
      *
      * @throws \Exception
      */
-    public function __construct(int $companyID, string $secretKey)
+    public function __construct($companyID, $secretKey)
     {
         if (empty($companyID) || empty($secretKey))
             throw new \Exception('CompanyID and ClientSecret parameters are required');
@@ -47,7 +47,7 @@ class Client
      * @param ListRequest $data
      * @return ListResponse
      */
-    public function getProductList(ListRequest $data) : ListResponse
+    public function getProductList(ListRequest $data)
     {
         $responseData = $this->request('product_list', $data);
 
@@ -58,7 +58,7 @@ class Client
      * @param ItemRequest $data
      * @return ItemResponse
      */
-    public function createProduct(ItemRequest $data) : ItemResponse
+    public function createProduct(ItemRequest $data)
     {
         $data->validate();
         $responseData = $this->request('product_add', $data);
@@ -70,7 +70,7 @@ class Client
      * @param BillRequest $data
      * @return BillResponse
      */
-    public function createBill(BillRequest $data) : BillResponse
+    public function createBill(BillRequest $data)
     {
         $data->validate();
         $responseData = $this->request('put_sales_bill', $data);
@@ -109,7 +109,7 @@ class Client
      * @return mixed|string
      * @throws \Exception
      */
-    private function request(string $resource, RequestInterface $data = null, $pdf = false)
+    private function request($resource, $data = null, $pdf = false)
     {
         $httpClient = $this->getHttpClient($pdf ? 'pdf' : 'json');
 

@@ -45,7 +45,7 @@ class BillRequest implements RequestInterface
     /**
      * @return array
      */
-    public function prepare() : array
+    public function prepare()
     {
         $data = [
             'foreign' => DataFormat::formatBool($this->foreign),
@@ -79,7 +79,7 @@ class BillRequest implements RequestInterface
      * @return bool
      * @throws InvalidDataException
      */
-    public function validate() : bool
+    public function validate()
     {
 //        if (empty($this->countCode))
 //            throw new InvalidDataException('countCode field is required');
@@ -195,7 +195,7 @@ class BillRequest implements RequestInterface
     /**
      * @param boolean $sendToFurs
      */
-    public function setSendToFurs(bool $sendToFurs)
+    public function setSendToFurs($sendToFurs)
     {
         $this->sendToFurs = $sendToFurs;
     }

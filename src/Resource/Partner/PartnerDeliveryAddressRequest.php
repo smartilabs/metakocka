@@ -23,7 +23,7 @@ class PartnerDeliveryAddressRequest implements RequestInterface
     /**
      * @return array
      */
-    public function prepare() : array
+    public function prepare()
     {
         $data = [
             'street' => $this->street,
@@ -39,7 +39,7 @@ class PartnerDeliveryAddressRequest implements RequestInterface
     /**
      * @return bool
      */
-    public function validate() : bool
+    public function validate() 
     {
         return true;
     }

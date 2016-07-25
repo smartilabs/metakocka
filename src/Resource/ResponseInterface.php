@@ -11,7 +11,7 @@ interface ResponseInterface
      * Parse response data and return object
      * @param \stdClass $data
      */
-    public function parse(\stdClass $data);
+    public function parse($data);
 
     public function getData();
 }

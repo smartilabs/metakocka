@@ -20,7 +20,7 @@ abstract class ResponseBaseObject implements ResponseInterface
     /**
      * @return mixed
      */
-    public function getData() : \stdClass
+    public function getData()
     {
         return $this->getData();
     }
