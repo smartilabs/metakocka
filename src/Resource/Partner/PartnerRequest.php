@@ -44,7 +44,7 @@ class PartnerRequest implements RequestInterface
     /**
      * @return array
      */
-    public function prepare() : array
+    public function prepare()
     {
         $data = [
             'business_entity' => DataFormat::formatBool($this->businessEntity),
@@ -72,7 +72,7 @@ class PartnerRequest implements RequestInterface
      * @return bool
      * @throws InvalidDataException
      */
-    public function validate() : bool
+    public function validate()
     {
         if (empty($this->customer))
             throw new InvalidDataException('customer field is required');
@@ -89,7 +89,7 @@ class PartnerRequest implements RequestInterface
     /**
      * @param bool $businessEntity
      */
-    public function setBusinessEntity(bool $businessEntity)
+    public function setBusinessEntity($businessEntity)
     {
         $this->businessEntity = $businessEntity;
 
@@ -100,7 +100,7 @@ class PartnerRequest implements RequestInterface
     /**
      * @param bool $taxpayer
      */
-    public function setTaxpayer(bool $taxpayer)
+    public function setTaxpayer($taxpayer)
     {
         $this->taxpayer = $taxpayer;
     }
@@ -108,7 +108,7 @@ class PartnerRequest implements RequestInterface
     /**
      * @param bool $foreignCountry
      */
-    public function setForeignCountry(bool $foreignCountry)
+    public function setForeignCountry($foreignCountry)
     {
         $this->foreignCountry = $foreignCountry;
     }

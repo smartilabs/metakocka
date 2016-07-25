@@ -25,7 +25,7 @@ class ListRequest implements RequestInterface
     /**
      * @param int $offset
      */
-    public function setOffset(int $offset)
+    public function setOffset($offset)
     {
         $this->offset = $offset;
     }
@@ -33,7 +33,7 @@ class ListRequest implements RequestInterface
     /**
      * @param int $limit
      */
-    public function setLimit(int $limit)
+    public function setLimit($limit)
     {
         $this->limit = $limit;
     }
@@ -41,7 +41,7 @@ class ListRequest implements RequestInterface
     /**
      * @param bool $sales
      */
-    public function setSales(bool $sales)
+    public function setSales($sales)
     {
         $this->sales = $sales;
     }
@@ -49,7 +49,7 @@ class ListRequest implements RequestInterface
     /**
      * @param bool $returnWarehauseStock
      */
-    public function setReturnWarehauseStock(bool $returnWarehauseStock)
+    public function setReturnWarehauseStock($returnWarehauseStock)
     {
         $this->returnWarehauseStock = $returnWarehauseStock;
     }
@@ -57,7 +57,7 @@ class ListRequest implements RequestInterface
     /**
      * @return array
      */
-    public function prepare() : array
+    public function prepare()
     {
         return [
             'sales' => DataFormat::formatBool($this->sales),
@@ -71,7 +71,7 @@ class ListRequest implements RequestInterface
      * No required params
      * @return bool
      */
-    public function validate() : bool
+    public function validate()
     {
         return true;
     }

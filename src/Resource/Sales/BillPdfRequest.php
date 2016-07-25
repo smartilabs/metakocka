@@ -25,7 +25,7 @@ class BillPdfRequest implements RequestInterface
     /**
      * @return array
      */
-    public function prepare() : array
+    public function prepare()
     {
         $data = [
             'count_code' => $this->countCode,
@@ -41,7 +41,7 @@ class BillPdfRequest implements RequestInterface
      * @return bool
      * @throws InvalidDataException
      */
-    public function validate() : bool
+    public function validate()
     {
         if (empty($this->countCode))
             throw new InvalidDataException('countCode field is required');
@@ -60,7 +60,7 @@ class BillPdfRequest implements RequestInterface
     /**
      * @param boolean $hideCode
      */
-    public function setHideCode(bool $hideCode)
+    public function setHideCode($hideCode)
     {
         $this->hideCode = $hideCode;
     }

@@ -26,7 +26,7 @@ class PartnerContactRequest implements RequestInterface
     /**
      * @return array
      */
-    public function prepare() : array
+    public function prepare()
     {
         $data = [
             'name' => $this->name,
@@ -43,7 +43,7 @@ class PartnerContactRequest implements RequestInterface
     /**
      * @return bool
      */
-    public function validate() : bool
+    public function validate()
     {
         return true;
     }

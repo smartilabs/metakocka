@@ -17,13 +17,13 @@ class PaymentRequest implements RequestInterface
     /** @var bool */
     private $markPrepaid = false;
 
-    /** @var float  */
+    /** @var float */
     private $amount = 0.0;
 
     /**
      * @return array
      */
-    public function prepare() : array
+    public function prepare()
     {
         $data = [
             'payment_type' => $this->paymentType,
@@ -41,7 +41,7 @@ class PaymentRequest implements RequestInterface
      * @return bool
      * @throws InvalidDataException
      */
-    public function validate() : bool
+    public function validate()
     {
         if (empty($this->date))
             throw new InvalidDataException('paid date can\'t be empty');
@@ -74,7 +74,7 @@ class PaymentRequest implements RequestInterface
     /**
      * @param bool $markPrepaid
      */
-    public function setMarkPrepaid(bool $markPrepaid)
+    public function setMarkPrepaid($markPrepaid)
     {
         $this->markPrepaid = $markPrepaid;
     }
@@ -82,7 +82,7 @@ class PaymentRequest implements RequestInterface
     /**
      * @param float $amount
      */
-    public function setAmount(float $amount)
+    public function setAmount($amount)
     {
         $this->amount = $amount;
     }

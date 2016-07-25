@@ -67,7 +67,7 @@ class ItemRequest implements RequestInterface
     /**
      * @return array
      */
-    public function prepare() : array
+    public function prepare()
     {
         $data = [
             'count_code' => $this->countCode,
@@ -99,7 +99,7 @@ class ItemRequest implements RequestInterface
      * @return bool
      * @throws InvalidDataException
      */
-    public function validate() : bool
+    public function validate()
     {
         if ($this->countCode && strlen($this->countCode) > 30)
             throw new InvalidDataException('countCode field must not exceed 30 chars');
@@ -198,7 +198,7 @@ class ItemRequest implements RequestInterface
     /**
      * @param float $height
      */
-    public function setHeight(float $height)
+    public function setHeight($height)
     {
         $this->height = $height;
     }
@@ -206,7 +206,7 @@ class ItemRequest implements RequestInterface
     /**
      * @param float $width
      */
-    public function setWidth(float $width)
+    public function setWidth($width)
     {
         $this->width = $width;
     }
@@ -214,7 +214,7 @@ class ItemRequest implements RequestInterface
     /**
      * @param float $depth
      */
-    public function setDepth(float $depth)
+    public function setDepth($depth)
     {
         $this->depth = $depth;
     }
@@ -222,7 +222,7 @@ class ItemRequest implements RequestInterface
     /**
      * @param float $weight
      */
-    public function setWeight(float $weight)
+    public function setWeight($weight)
     {
         $this->weight = $weight;
     }
@@ -230,7 +230,7 @@ class ItemRequest implements RequestInterface
     /**
      * @param float $amount
      */
-    public function setAmount(float $amount)
+    public function setAmount($amount)
     {
         $this->amount = $amount;
     }
@@ -238,7 +238,7 @@ class ItemRequest implements RequestInterface
     /**
      * @param float $price
      */
-    public function setPrice(float $price)
+    public function setPrice($price)
     {
         $this->price = $price;
     }
@@ -246,7 +246,7 @@ class ItemRequest implements RequestInterface
     /**
      * @param float $discount
      */
-    public function setDiscount(float $discount)
+    public function setDiscount($discount)
     {
         $this->discount = $discount;
     }
@@ -268,7 +268,7 @@ class ItemRequest implements RequestInterface
     /**
      * @param int $mkId
      */
-    public function setMkId(int $mkId)
+    public function setMkId($mkId)
     {
         $this->mkId = $mkId;
     }
