@@ -57,7 +57,7 @@ class ListRequest implements RequestInterface
     /**
      * @return array
      */
-    public function prepare()
+    public function prepare(): array
     {
         return [
             'sales' => DataFormat::formatBool($this->sales),
@@ -71,7 +71,7 @@ class ListRequest implements RequestInterface
      * No required params
      * @return bool
      */
-    public function validate()
+    public function validate():bool
     {
         return true;
     }

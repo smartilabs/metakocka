@@ -99,7 +99,7 @@ class ItemRequest implements RequestInterface
      * @return bool
      * @throws InvalidDataException
      */
-    public function validate()
+    public function validate(): bool
     {
         if ($this->countCode && strlen($this->countCode) > 30)
             throw new InvalidDataException('countCode field must not exceed 30 chars');

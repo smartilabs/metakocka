@@ -1,7 +1,13 @@
 <?php
+
 namespace Smarti\Metakocka;
 
+use Exception;
+use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
+use Smarti\Metakocka\Exception\InvalidDataException;
 use Smarti\Metakocka\Resource\Product\ItemRequest;
 use Smarti\Metakocka\Resource\Product\ItemResponse;
 use Smarti\Metakocka\Resource\Product\ListResponse;
@@ -10,26 +16,30 @@ use Smarti\Metakocka\Resource\Product\ListRequest;
 use Smarti\Metakocka\Resource\Sales\BillPdfRequest;
 use Smarti\Metakocka\Resource\Sales\BillRequest;
 use Smarti\Metakocka\Resource\Sales\BillResponse;
+use stdClass;
 
+/**
+ * Class Client
+ * @package Smarti\Metakocka
+ */
 class Client
 {
-    /** @var int */
-    protected $companyID = null;
-
-    /** @var string */
-    protected $secretKey = null;
+    protected int $companyID;
+    protected string $secretKey;
 
     /**
      * Client constructor.
-     * @param int $companyID
+     *
+     * @param int    $companyID
      * @param string $secretKey
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function __construct($companyID, $secretKey)
+    public function __construct(int $companyID, string $secretKey)
     {
-        if (empty($companyID) || empty($secretKey))
-            throw new \Exception('CompanyID and ClientSecret parameters are required');
+        if (empty($companyID) || empty($secretKey)) {
+            throw new Exception('CompanyID and ClientSecret parameters are required');
+        }
 
         $this->companyID = $companyID;
         $this->secretKey = $secretKey;
@@ -38,78 +48,95 @@ class Client
     /**
      * @return bool
      */
-    public function validate()
+    public function validate(): bool
     {
         return true;
     }
 
     /**
      * @param ListRequest $data
+     *
      * @return ListResponse
+     * @throws Exception
+     * @throws GuzzleException
      */
-    public function getProductList(ListRequest $data)
+    public function getProductList(ListRequest $data): ListResponse
     {
-        $responseData = $this->request('product_list', $data);
-
-        return new ListResponse($responseData);
+        return new ListResponse(
+            $this->requestData('product_list', $data)
+        );
     }
 
     /**
      * @param ItemRequest $data
+     *
      * @return ItemResponse
+     * @throws InvalidDataException
+     * @throws Exception
+     * @throws GuzzleException
      */
-    public function createProduct(ItemRequest $data)
+    public function createProduct(ItemRequest $data): ItemResponse
     {
-        $data->validate();
-        $responseData = $this->request('product_add', $data);
+        $data->validate();;
 
-        return new ItemResponse($responseData);
+        return new ItemResponse(
+            $this->requestData('product_add', $data)
+        );
     }
 
     /**
      * @param BillRequest $data
+     *
      * @return BillResponse
+     * @throws InvalidDataException
+     * @throws GuzzleException
      */
     public function createBill(BillRequest $data)
     {
         $data->validate();
-        $responseData = $this->request('put_sales_bill', $data);
 
-        return new BillResponse($responseData);
+        return new BillResponse(
+            $this->requestData('put_sales_bill', $data)
+        );
     }
 
     /**
      * @param BillPdfRequest $data
-     * @return bool|mixed
-     * @throws Exception\InvalidDataException
+     *
+     * @return string|null
+     * @throws GuzzleException
+     * @throws InvalidDataException
      */
-    public function getBillPdf(BillPdfRequest $data)
+    public function getBillPdf(BillPdfRequest $data): ?string
     {
         $data->validate();
-        $responseData = $this->request('report_bill', $data, true);
 
-        return $responseData;
+        return $this->requestPdf('report_bill', $data, true);
     }
 
     /**
      * @param string $type
-     * @return \GuzzleHttp\Client
+     *
+     * @return GuzzleClient
      */
-    private function getHttpClient($type = 'json')
+    private function getHttpClient($type = 'json'): GuzzleClient
     {
-        return new \GuzzleHttp\Client([
-            'base_uri' => "https://main.metakocka.si/rest/eshop/v1/$type/",
-        ]);
+        return new GuzzleClient(
+            [
+                'base_uri' => "https://main.metakocka.si/rest/eshop/v1/$type/",
+            ]
+        );
     }
 
     /**
-     * @param string $resource
+     * @param string                $resource
      * @param RequestInterface|null $data
-     * @param bool $pdf
-     * @return mixed|string
-     * @throws \Exception
+     * @param bool                  $pdf
+     *
+     * @return ResponseInterface|null
+     * @throws GuzzleException
      */
-    private function request($resource, $data = null, $pdf = false)
+    private function request(string $resource, ?RequestInterface $data = null, bool $pdf = false): ?ResponseInterface
     {
         $httpClient = $this->getHttpClient($pdf ? 'pdf' : 'json');
 
@@ -118,35 +145,65 @@ class Client
         $postData["company_id"] = $this->companyID;
 
         try {
-            $response = $httpClient->request('POST', $resource, [
-                'body' => json_encode($postData),
-                'headers' => [
-                    'content-type' => 'application/json',
-//                    'accept' => 'application/json',
-                ],
-            ]);
-
-            $contents = $response->getBody()->getContents();
-
-            if ($pdf)
-                return $contents;
-
-            $responseObject = json_decode($contents);
-
-            $this->verifyResponse($responseObject);
-
-            return $responseObject;
+            return $httpClient->request(
+                'POST',
+                $resource,
+                [
+                    'body' => json_encode($postData),
+                    'headers' => [
+                        'content-type' => 'application/json',
+                    ],
+                ]
+            );
         } catch (ClientException $e) {
             var_dump($e->getMessage());
-            die;
         }
+
+        return null;
     }
 
     /**
-     * @param \stdClass $response
-     * @throws \Exception
+     * @param string                $resource
+     * @param RequestInterface|null $data
+     * @param bool                  $pdf
+     *
+     * @return string|null
+     * @throws GuzzleException
      */
-    public function verifyResponse(\stdClass $response)
+    private function requestPdf(string $resource, ?RequestInterface $data = null, bool $pdf = false): ?string
+    {
+        $response = $this->request($resource, $data, true);
+
+        return $response->getBody()->getContents();
+    }
+
+    /**
+     * @param string                $resource
+     * @param RequestInterface|null $data
+     *
+     * @return stdClass
+     * @throws GuzzleException
+     */
+    private function requestData(string $resource, ?RequestInterface $data = null): stdClass
+    {
+        $response = $this->request($resource, $data);
+        $contents = $response->getBody()->getContents();
+        $responseObject = json_decode($contents);
+
+        $this->verifyResponse($responseObject);
+
+        var_dump($responseObject);
+        die;
+
+        return $responseObject;
+    }
+
+    /**
+     * @param stdClass $response
+     *
+     * @throws Exception
+     */
+    public function verifyResponse(stdClass $response)
     {
         if (($code = $response->opr_code) != 0) {
             $desc = isset($response->opr_desc) ? $response->opr_desc : null;
@@ -154,7 +211,7 @@ class Client
                 (isset($response->opr_desc_app) ? $response->opr_desc_app :
                     "Unknown exception while connecting to API ($code)");
 
-            throw new \Exception($desc);
+            throw new Exception($desc);
         }
     }
 }

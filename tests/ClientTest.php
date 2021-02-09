@@ -1,32 +1,42 @@
 <?php
+
+use GuzzleHttp\Exception\GuzzleException;
+use PHPUnit\Framework\TestCase;
 use Smarti\Metakocka\Client;
 use Smarti\Metakocka\Resource\Product;
 
-class ClientTest extends PHPUnit_Framework_TestCase
+class ClientTest extends TestCase
 {
     /** @var Client */
-    protected $client;
+    protected Client $client;
 
-    protected function setUp()
+    /**
+     * @throws Exception
+     */
+    protected function setUp(): void
     {
-        $companyID = 123;
-        $secretKey = 'secret_key';
+        $companyID = 3518;
+        $secretKey = '1909df15-ead8-4c32-9f74-210c79678973';
 
         $this->client = new Client($companyID, $secretKey);
     }
 
-    protected function tearDown()
+    /**
+     *
+     */
+    protected function tearDown(): void
     {
         unset($this->client);
     }
 
     /**
-     * @expectedException \Exception
+     *
      *
      * We can't have instance without config
      */
     public function testInstance()
     {
+        $this->expectException(\Exception::class);// We can't have instance without config
         new Client(0, '');
     }
 
@@ -40,6 +50,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
     /**
      * We need to get Product\ListResponse
+     * @throws GuzzleException
      */
     public function testGetProductList()
     {
@@ -48,23 +59,23 @@ class ClientTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Unknown exception while connecting to API (-1)
+     * @throws Exception
      */
     public function testVerifyResponseUnknownException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Unknown exception while connecting to API (-1)");
         $response = new \stdClass();
         $response->opr_code = -1;
 
         $this->client->verifyResponse($response);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Test
-     */
     public function testVerifyResponseOprDesc()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Test");
+
         $response = new \stdClass();
         $response->opr_code = -1;
         $response->opr_desc = 'Test';
@@ -72,12 +83,10 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $this->client->verifyResponse($response);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Test
-     */
     public function testVerifyResponseOprDescApp()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Test");
         $response = new \stdClass();
         $response->opr_code = -1;
         $response->opr_desc_app = 'Test';
