@@ -25,12 +25,14 @@ use Smarti\Metakocka\Model\Sales\BillResponse;
 use stdClass;
 
 /**
- * Class Client
+ * Class ApiClient
  * @package Smarti\Metakocka
  */
-class Client
+class ApiClient
 {
-    protected ApiClient $apiClient;
+    protected int $companyID;
+    protected string $secretKey;
+    protected bool $debugMode;
 
     /**
      * Client constructor.
@@ -47,28 +49,51 @@ class Client
             throw new Exception('CompanyID and ClientSecret parameters are required');
         }
 
-        $this->apiClient = new ApiClient($companyID, $secretKey, $debugMode);
+        $this->companyID = $companyID;
+        $this->secretKey = $secretKey;
+        $this->debugMode = $debugMode;
     }
 
-    public function getApiClient() {
-        return $this->apiClient;
+    /**
+     * Test login here
+     *
+     * @return bool
+     */
+    public function validate(): bool
+    {
+        return true;
     }
 
     /**
      * @param SearchRequest $searchRequest
      * @param bool          $retrieveAll
      *
-     * @return SearchResponse
+     * @return stdClass
      * @throws GuzzleException
-     * @throws JsonMapper_Exception
      */
-    public function search(SearchRequest $searchRequest, bool $retrieveAll = false): SearchResponse
+    public function search(SearchRequest $searchRequest, bool $retrieveAll = false): stdClass
     {
-        /** @var SearchResponse $response */
-        $response = JsonMapper::map(
-            $this->apiClient->search($searchRequest, $retrieveAll),
-            new SearchResponse()
+        $results = [];
+
+        do {
+            $response = $this->requestData('', $searchRequest, 'search');
+
+            if (((int) $response->result_count) > 0) {
+                $results = [
+                    ...$results,
+                    ...$response->result,
+                ];
+
+                $searchRequest->setOffset(
+                    $searchRequest->getOffset() + $searchRequest->getLimit()
+                );
+            }
+        } while (
+            $retrieveAll &&
+            $searchRequest->getOffset() < $response->result_all_records
         );
+
+        $response->result = $results;
 
         return $response;
     }
@@ -77,15 +102,18 @@ class Client
      * @param string $documentType
      * @param string $documentId
      *
-     * @return Order
+     * @return stdClass
      * @throws GuzzleException
-     * @throws JsonMapper_Exception
      */
-    public function getDocument(string $documentType, string $documentId): Order
+    public function getDocument(string $documentType, string $documentId): stdClass
     {
-        $document = $this->apiClient->getDocument($documentType, $documentId);
-
-        return JsonMapper::map($document, new Order());
+        return $this->requestData(
+            '',
+            (new DocumentRequest())
+                ->setDocType($documentType)
+                ->setDocId($documentId),
+            'get_document'
+        );
     }
 
 

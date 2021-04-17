@@ -1,5 +1,5 @@
 <?php
-namespace Smarti\Metakocka\Resource\Product;
+namespace Smarti\Metakocka\Model\Product;
 
 use Smarti\Metakocka\Enum\Tax;
 use Smarti\Metakocka\Enum\Unit;

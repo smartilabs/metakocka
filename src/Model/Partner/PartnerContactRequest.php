@@ -1,5 +1,5 @@
 <?php
-namespace Smarti\Metakocka\Resource\Partner;
+namespace Smarti\Metakocka\Model\Partner;
 
 use Smarti\Metakocka\Enum\Unit;
 use Smarti\Metakocka\Exception\InvalidDataException;

@@ -1,5 +1,5 @@
 <?php
-namespace Smarti\Metakocka\Resource\Sales;
+namespace Smarti\Metakocka\Model\Sales;
 
 use Smarti\Metakocka\Resource\ResponseBase;
 use Smarti\Metakocka\Resource\ResponseInterface;

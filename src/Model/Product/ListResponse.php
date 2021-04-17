@@ -1,5 +1,5 @@
 <?php
-namespace Smarti\Metakocka\Resource\Product;
+namespace Smarti\Metakocka\Model\Product;
 
 use Smarti\Metakocka\Resource\DataFormat;
 use Smarti\Metakocka\Resource\ResponseBase;

@@ -1,5 +1,5 @@
 <?php
-namespace Smarti\Metakocka\Resource\Sales;
+namespace Smarti\Metakocka\Model\Sales;
 
 use Smarti\Metakocka\Enum\PaymentType;
 use Smarti\Metakocka\Exception\InvalidDataException;

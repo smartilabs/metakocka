@@ -1,60 +1,20 @@
 <?php
+
 namespace Smarti\Metakocka\Resource;
 
 use stdClass;
 
-abstract class ResponseBase implements ResponseInterface
+/**
+ * Class ResponseBase
+ * @package Smarti\Metakocka\Resource
+ */
+abstract class ResponseBase
 {
-    protected stdClass $data;
     protected int $oprCode = 0;
     protected int $oprCodeApp = 0;
     protected ?string $oprDesc = null;
     protected ?string $oprDescApp = null;
-    protected int $oprTimeMs = 0;
-
-    /**
-     * ResponseBase constructor.
-     * @param stdClass $data
-     */
-    public function __construct(stdClass $data)
-    {
-        $this->data = $data;
-
-        $this->parseBase($data);
-        $this->parse($data);
-    }
-
-    /**
-     * @param $data
-     */
-    protected final function parseBase(stdClass $data)
-    {
-        $this->oprCode = (int)$data->opr_code;
-        $this->oprCodeApp = (int)(isset($data->opr_code_app) ? $data->opr_code_app : 0);
-        $this->oprDesc = isset($data->opr_desc) ? $data->opr_desc : '';
-        $this->oprDescApp = isset($data->opr_desc) ? $data->opr_desc : '';
-        $this->oprTimeMs = (int)$data->opr_time_ms;
-    }
-
-    /**
-     * @return stdClass
-     */
-    public function getData(): stdClass
-    {
-        return $this->data;
-    }
-
-    /**
-     * @param stdClass $data
-     *
-     * @return ResponseBase
-     */
-    public function setData(stdClass $data): ResponseBase
-    {
-        $this->data = $data;
-
-        return $this;
-    }
+    protected int $oprTime = 0;
 
     /**
      * @return int
@@ -139,19 +99,19 @@ abstract class ResponseBase implements ResponseInterface
     /**
      * @return int
      */
-    public function getOprTimeMs(): int
+    public function getOprTime(): int
     {
-        return $this->oprTimeMs;
+        return $this->oprTime;
     }
 
     /**
-     * @param int $oprTimeMs
+     * @param int $oprTime
      *
      * @return ResponseBase
      */
-    public function setOprTimeMs(int $oprTimeMs): ResponseBase
+    public function setOprTime(int $oprTime): ResponseBase
     {
-        $this->oprTimeMs = $oprTimeMs;
+        $this->oprTime = $oprTime;
 
         return $this;
     }
