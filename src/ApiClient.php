@@ -75,6 +75,8 @@ class ApiClient
     {
         $results = [];
 
+        print "Searching metakocka" . PHP_EOL;
+
         do {
             $response = $this->requestData('', $searchRequest, 'search');
 
@@ -88,6 +90,8 @@ class ApiClient
                     $searchRequest->getOffset() + $searchRequest->getLimit()
                 );
             }
+
+            print "Metakocka results: " . sizeof($results) . PHP_EOL;
         } while (
             $retrieveAll &&
             $searchRequest->getOffset() < $response->result_all_records
